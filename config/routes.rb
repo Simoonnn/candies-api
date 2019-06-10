@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  post 'api/admin/login', controller: 'admin', action: 'login'
+  post 'api/admin/register', controller: 'admin', action: 'register'
+  post 'api/admin/is_logged_in', controller: 'admin', action: 'is_logged_in'
 end
