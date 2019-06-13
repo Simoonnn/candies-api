@@ -18,7 +18,22 @@ class ItemsController < ApplicationController
     limit = params['limit'].to_i
     total = Item.count
     page = params['page'].to_i
-    if limit > 20 || limit < 3
+    phrase = params['phrase'].to_s || false
+    sort = params['sort'] == '' ? false : params['sort']
+    if sort
+      sort = sort.split('SEP')
+      puts sort[0]
+      puts sort[1]
+      puts sort.class
+      if (sort[0] == 'name' || sort[0] == 'price') || (sort[1] == 'desc' || sort[1] == 'asc')
+        key = sort[0]
+        order = sort[1]
+      else
+        sort = false
+      end
+
+    end
+    if limit > 30 || limit < 3
       limit = 5
     end
     if page < 1
@@ -27,7 +42,17 @@ class ItemsController < ApplicationController
     if (total / limit < page - 1)
       offset = (total / limit).round - 1
     end
-    body = Item.offset(offset).limit(limit).order(id: :desc)
+    if phrase != ''
+      phrase = '%' + phrase + '%'
+      items = Item.where('name LIKE :phrase', { phrase: phrase }).limit(limit)
+    else
+      items = Item.offset(offset).limit(limit)
+    end
+    if sort
+      body = items.order(key => order)
+    else
+      body = items.order(id: :desc)
+    end
     render json: {response: body}
   end
 end
