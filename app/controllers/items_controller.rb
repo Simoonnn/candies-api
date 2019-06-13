@@ -55,4 +55,9 @@ class ItemsController < ApplicationController
     end
     render json: {response: body}
   end
+  def specific
+    array = params['array']
+    body = { items: Item.where(id: array)}
+    render json: body
+  end
 end
