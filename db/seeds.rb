@@ -1,4 +1,4 @@
-20.times do |n|
+10.times do |n|
   Item.create(
           name: Faker::Name.first_name,
           description: Faker::Lorem.sentence(10),
